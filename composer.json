@@ -1,6 +1,6 @@
 {
-    "name": "magento/theme-frontend-ecomteck",
-    "description": "N/A",
+    "name": "ecomteck/theme-frontend-ecomteck",
+    "description": "Ecomteck Free Clean Responsive Theme for magento 2.1.x, 2.2.x, 2.3.x. It is very hight performance.",
     "config": {
         "sort-packages": true
     },
