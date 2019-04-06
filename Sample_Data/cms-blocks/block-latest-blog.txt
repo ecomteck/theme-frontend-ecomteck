@@ -1,0 +1,5 @@
+CMS Block Title: Latest Blog
+CMS Block Identifier: latest-blog
+Block Content:
+
+{{widget type="Magefan\Blog\Block\Widget\Recent" title="RECENT POSTS" number_of_posts="3" category_id="1" tag_id="0" author_id="0" type_name="Recent Blog Posts"}}

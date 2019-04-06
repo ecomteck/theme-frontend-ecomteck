@@ -1,0 +1,17 @@
+CMS Block Title: Block Banner
+CMS Block Identifier: block-banner
+Block Content:
+
+<div class="block-wrap block-images" style="margin-bottom: 3%;">
+<div class="row">
+    <div class="col-lg-4 col-md-4">
+    	<p><a href="{{store direct_url='women.html'}}"><img src="{{media url='wysiwyg/banner4.jpg'}}" alt="" /></a></p>
+    </div>
+    <div class="col-lg-4 col-md-4">
+    	<p><a href="{{store direct_url='new.html'}}"><img src="{{media url='wysiwyg/banner5.jpg'}}" alt="" /></a></p>
+    </div>
+    <div class="col-lg-4 col-md-4">
+    	<p><a href="{{store direct_url='men.html'}}"><img src="{{media url='wysiwyg/banner6.jpg'}}" alt="" /></a></p>
+    </div>
+</div>
+</div>

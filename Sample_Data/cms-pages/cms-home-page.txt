@@ -1,0 +1,44 @@
+CMS Block Title: Block Banner
+CMS Block Identifier: block-banner
+Layout Update XML:
+
+<referenceContainer name="page.top">
+    <block class="Magento\Cms\Block\Block" name="Slider">
+        <arguments>
+            <argument name="block_id" xsi:type="string">slider</argument>
+        </arguments>
+    </block>
+</referenceContainer>
+
+<referenceContainer name="content">
+    <block class="Magento\Cms\Block\Block" name="Category_Banner">
+        <arguments>
+            <argument name="block_id" xsi:type="string">category-banner</argument>
+        </arguments>
+    </block>
+    <block class="Magento\Cms\Block\Block" name="New_Product">
+        <arguments>
+            <argument name="block_id" xsi:type="string">new-product</argument>
+        </arguments>
+    </block>
+    <block class="Magento\Cms\Block\Block" name="Block_Banner">
+        <arguments>
+            <argument name="block_id" xsi:type="string">block-banner</argument>
+        </arguments>
+    </block>
+    <block class="Magento\Cms\Block\Block" name="Feature_Product">
+        <arguments>
+            <argument name="block_id" xsi:type="string">feature-product</argument>
+        </arguments>
+    </block>
+    <block class="Magento\Cms\Block\Block" name="Latest_Block">
+        <arguments>
+            <argument name="block_id" xsi:type="string">latest-blog</argument>
+        </arguments>
+    </block>
+    <block class="Ves\Brand\Block\BrandList" name="brand_list">
+	<arguments>
+			<argument name="number_item_per_column" xsi:type="string">1</argument>
+	</arguments>
+    </block>
+</referenceContainer>

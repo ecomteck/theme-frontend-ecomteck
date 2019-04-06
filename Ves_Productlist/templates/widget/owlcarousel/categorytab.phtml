@@ -1,0 +1,237 @@
+<?php
+use Magento\Framework\App\Action\Action;
+$_vesHelper = $this->helper('Ves\Productlist\Helper\Data');
+$_imgHelper = $this->helper('Ves\Productlist\Helper\Image');
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+$blockId = rand().time();
+$templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+$html = $classes = '';
+$tabId = 'productlist-'.$blockId;
+
+// General Settings
+$widget_title = $this->getConfig('widget_title');
+$addition_class = $this->getConfig('addition_class');
+$cmsblock = $this->getConfig('cmsblock');
+$pretext_html = $this->getConfig('pretext_html');
+if($cmsblock === 'pretext_html'){
+    $pretext_html = str_replace(" ", "+", $pretext_html);
+    $html = base64_decode($pretext_html);
+}elseif($cmsblock!=''){
+    $html = $this->getCmsBlockModel()->load($cmsblock)->getContent();
+}
+$html = $_vesHelper->filter($html);
+
+
+// Tab Settings
+$height_type           = $this->getConfig('height_type');
+$number_item           = $this->getConfig('number_item',12);
+$enable_animate_tab    = $this->getConfig('enable_animate_tab');
+$animation_speed       = (int)$this->getConfig('animation_speed',"slow");
+$collapsible           = $this->getConfig('collapsible');
+$cycle                 = $this->getConfig('cycle',1000);
+$default_tab           = (int)$this->getConfig('default_tab',0);
+$transition_in         = $this->getConfig('transition_in',"fadeIn");
+$transition_in_easing  = $this->getConfig('transition_in_easing',"swing");
+$transition_out        = $this->getConfig('transition_out',"fadeOut");
+$transition_out_easing = $this->getConfig('transition_out_easing',"swing");
+$event                 = $this->getConfig('event',"click");
+$defaultTabId          = '';
+
+
+// Item Settings
+$show_name_single_line = $this->getConfig('show_name_single_line');
+if($show_name_single_line){
+    $classes .= ' single-line-name';
+}
+
+
+// OWL Carousel
+$number_item_percolumn = (int)$this->getConfig('number_item_percolumn',200);
+$large_max_items       = (int)$this->getConfig('large_max_items',6);
+$large_items           = (int)$this->getConfig('large_items',5);
+$portrait_items        = (int)$this->getConfig('portrait_items',4);
+$tablet_items          = (int)$this->getConfig('tablet_items',4);
+$tablet_small_items    = (int)$this->getConfig('tablet_small_items',2);
+$mobile_items          = (int)$this->getConfig('mobile_items',1);
+$autoplay              = $this->getConfig('autoplay');
+$autoplay_timeout      = (int)$this->getConfig('autoplay_timeout',3000);
+$dots                  = $this->getConfig('dots');
+$nav                   = $this->getConfig('nav');
+$nav_next              = $this->getConfig('nav_next');
+$nav_pre               = $this->getConfig('nav_pre');
+$rtl                   = $this->getConfig('rtl',false);
+$loop                  = $this->getConfig('loop');
+$lazyload              = $this->getConfig('lazyload');
+$margin                = (int) $this->getConfig('margin');
+$mouseDrag             = (int) $this->getConfig('mousedrag');
+$touchDrag             = (int) $this->getConfig('touchdrag');
+$pullDrag              = (int) $this->getConfig('pulldrag');
+$ajaxBlockId           = 'productlist-carousel-'.$blockId;
+$productsource         = $this->getConfig('productsource', 'latest');
+
+// Convert collection to multiple row
+// Default column
+$column = 8;
+$tabs = $this->getTabs();
+foreach ($tabs as $k => $tab) {
+    if(!$tab['ajax_type']){
+        $category = $this->getCategory($tab['category_id']);
+        $collection = $this->getProductsBySource($productsource, ['categories' => [$tab['category_id']]]);
+        $_productCollection = [];
+        $total = $collection->count();
+        if($total%$number_item_percolumn == 0){
+            $column = $total/$number_item_percolumn;
+        }else{
+            $column = floor($total/$number_item_percolumn)+1;
+        }
+        if($column<$large_max_items) $column = $large_max_items;
+        $i = $x = 0;
+        foreach ($collection as $_product) {
+            if($i<$column){
+                $i++;
+            }else{
+                $i = 1;
+                $x++;
+            }
+            $_productCollection[$i][$x] = $_product;
+        }
+        $tabs[$k]['productCollection'] = $_productCollection;
+        $tabs[$k]['productCount'] = $total;
+        if($tabs[$k]['item_title']==''){
+            $tabs[$k]['item_title'] = $category->getName();
+        }
+        if($total == 0) unset($tabs[$k]);
+    }
+    if(isset($tabs[$k])){
+        if($tabs[$k]['item_title']==''){
+            if(!$category){
+                $category = $this->getCategory($tab['category_id']);
+            }
+            $tabs[$k]['item_title'] = $category->getName();
+        }
+
+        $tabs[$k]['id'] = str_replace('_','-','productlist-'.$tab['category_id'].'-'.rand().time());
+        if(isset($tabs[$k]['position']) && $default_tab && $tabs[$k]['position'] == $default_tab){
+            $defaultTabId = 'tab-'.$tabs[$k]['id'];
+        }
+    }
+}
+$data = $this->getData();
+?>
+<div id="<?php echo $tabId; ?>" class="block widget ves-widget productlist-widget productlist-easytab-play <?php echo $addition_class?$addition_class:'' ?>">
+    <?php if($widget_title){ ?>
+    <div class="block-title">
+        <strong><?php echo $widget_title ?></strong>
+    </div>
+    <?php if($html!=''){ ?>
+    <div class="pretext-html"><?php echo $html ?></div>
+    <?php } ?>
+    <?php } ?>
+    <?php if(count($tabs)>0){ ?>
+    <div id="easytab-<?php echo $blockId ?>" class="block-content"
+        data-animate="<?php echo $enable_animate_tab?'true':'false'; ?>"
+        data-animation-speed="<?php echo $animation_speed; ?>"
+        data-collapsible="<?php echo $collapsible?"true":"false" ?>"
+        <?php if($cycle){ ?>data-cycle="<?php echo $cycle ?>"<?php } ?>
+        <?php if($defaultTabId){ ?>data-default-tab="<?php echo "#".$defaultTabId ?>"<?php } ?>
+        <?php if($transition_in){ ?>data-transition-in="<?php echo $transition_in ?>"<?php } ?>
+        <?php if($transition_in_easing){ ?>data-transition-in-easing="<?php echo $transition_in_easing ?>"<?php } ?>
+        <?php if($transition_out){ ?>data-transition-out="<?php echo $transition_out ?>"<?php } ?>
+        <?php if($transition_out_easing){ ?>data-transition-out-easing="<?php echo $transition_out_easing ?>"<?php } ?>
+        data-event="<?php echo $event ?>"
+        >
+        <ul class="etabs">
+            <?php foreach ($tabs as $k => $tab) { ?>
+            <li class="nav-item tab <?php echo $tab['item_class']?$tab['item_class']:'' ?>" id="tab-<?php echo $tab['id']; ?>"><a href="#<?php echo $tab['id'] ?>"><?php echo $tab['item_title']?$tab['item_title']:'' ?></a></li>
+            <?php } ?>
+        </ul>
+        <div class="tab-content productlist-owlcarousel-play"
+        id="<?php echo $ajaxBlockId ?>"
+        data-nav="<?php echo $nav?'true':'false'; ?>"
+        data-dot="<?php echo $dots?'true':'false'; ?>"
+        data-autoplay="<?php echo $autoplay?'true':'false'; ?>"
+        data-autoplay-timeout="<?php echo $autoplay_timeout; ?>"
+        data-mobile-items="<?php echo $mobile_items; ?>"
+        data-tablet-small-items="<?php echo $tablet_small_items; ?>"
+        data-tablet-items="<?php echo $tablet_small_items; ?>"
+        data-portrait-items="<?php echo $portrait_items; ?>"
+        data-large-items="<?php echo $large_items; ?>"
+        data-large-max-items="<?php echo $large_max_items; ?>"
+        data-rtl="<?php echo $rtl?"true":"false" ?>"
+        data-loop="<?php echo $loop?"true":"false" ?>"
+        data-lazyload="<?php echo $lazyload?"true":"false" ?>"
+        data-nav-text-owlpre="<?php echo $nav_pre ?>"
+        data-nav-text-owlnext="<?php echo $nav_next ?>"
+        data-margin="<?php echo $margin ?>"
+        data-mouseDrag="<?php echo $mouseDrag ?>"
+        data-pulldrag="<?php echo $pullDrag ?>"
+        data-touchdrag="<?php echo $touchDrag ?>"
+        <?php if($height_type){ ?>data-height-type="<?php echo $height_type ?>"<?php } ?>
+        >
+        <?php foreach ($tabs as $k => $tab) { ?>
+        <div id="<?php echo $tab['id'] ?>" class="ves-products-grid grid <?php echo $classes ?> <?php echo $tab['item_class']?$tab['item_class']:'' ?>">
+            <?php
+            $classTmp = 'owl-carousel';
+            if(!isset($tab['productCount']) && !isset($tab['productCount'])){
+                $classTmp = 'owl-carousel';
+            } ?>
+            <div class="<?php echo $classTmp ?> product-items">
+                <?php
+                if(isset($tab['productCount']) && $tab['productCount']>0){
+                    $collection = $tab['productCollection'];
+                    ?>
+                    <?php // Product List ?>
+                    <?php
+                    $data['collection'] = $collection;
+                    echo $this->getProductHtml($data); ?>
+                    <?php } ?>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+    <script type="text/javascript">
+        require(['jquery'],function($){
+         $(document).ready(function(){
+            require([
+                'jquery',
+                'Ves_Productlist/js/productlist',
+                ], function ($, productlist) {
+                    var vesProductList = $('#<?php echo $tabId; ?>').productlist().data('ves-productlist');
+                    var ajaxUrl = "<?php echo $this->getAjaxUrl() ?>";
+                    vesProductList.easyTabInit("<?php echo '#easytab-'.$blockId ?>").bind("easytabs:before",function(e, $clicked, $targetPanel, settings) {
+                        jQuery($targetPanel.selector).addClass("paneltab");
+                        vesProductList.equalHeight($targetPanel.selector);
+                    }).bind("easytabs:after",function(e, $clicked, $targetPanel, settings) {
+                        jQuery($targetPanel.selector).removeClass("paneltab");
+                    });
+                    <?php
+                    $widgetData = $this->getData();
+                    unset($widgetData['pretext_html']);
+                    unset($widgetData['tabs']);
+                    ?>
+                    <?php foreach ($tabs as $_tab) { ?>
+                        <?php if(isset($_tab['ajax_type']) && $_tab['ajax_type'] == 0){ ?>
+                            jQuery("<?php echo '#'.$_tab['id'].' .owl-carousel' ?>").trigger('destroy.owl.carousel');
+                            vesProductList.owlCarouselInit("<?php echo '#'.$ajaxBlockId ?>", "<?php echo '#'.$_tab['id'].' .owl-carousel' ?>", "");
+                            <?php } ?>
+                            <?php
+                            $data = [];
+                            $data = $widgetData;
+                            $data['ajaxBlockId'] = $ajaxBlockId;
+                            $data['number_item'] = $widgetData['number_item'];
+                            $data['tab'] = $_tab;
+                            ?>
+                            <?php if(isset($_tab['ajax_type']) && $_tab['ajax_type'] == 1){ ?>
+                                vesProductList.ajaxProducts(<?php echo json_encode($data) ?>, ajaxUrl);
+                                <?php } ?>
+                                <?php if(isset($_tab['ajax_type']) && $_tab['ajax_type'] == 2){ ?>
+                                    vesProductList.ajaxClickProduct(<?php echo json_encode($data) ?>, ajaxUrl);
+                                    <?php } ?>
+                                    <?php } ?>
+                                });
+        });
+     });
+ </script>
+ <?php } ?>
+</div>

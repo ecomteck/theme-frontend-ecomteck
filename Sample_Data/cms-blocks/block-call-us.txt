@@ -1,0 +1,11 @@
+CMS Block Title: Call Us
+CMS Block Identifier: call-us
+Block Content:
+
+<div class="call-us">
+<div class="icon"><em class="fa fa-phone" aria-hidden="true">&nbsp;</em></div>
+<div class="content">
+<p style="line-height: 15px; margin: 0; color: #888; ">Need help? Call us now:</p>
+<a href="tel:(+777)83448733" style="font-weight: 600; letter-spacing: 2px;">(+777) 8344 8733</a>
+</div>
+</div>

@@ -1,0 +1,17 @@
+CMS Block Title: Category Banner
+CMS Block Identifier: category-banner
+Block Content:
+
+<div class="block-wrap block-images" style="margin-bottom: 3%;">
+<div class="row">
+    <div class="col-lg-4 col-md-4">
+    	<p><a href="{{store direct_url='women.html'}}"><img src="{{media url='wysiwyg/banner1.jpg'}}" alt="" /></a></p>
+    </div>
+    <div class="col-lg-4 col-md-4">
+    	<p><a href="{{store direct_url='new.html'}}"><img src="{{media url='wysiwyg/banner2.jpg'}}" alt="" /></a></p>
+    </div>
+    <div class="col-lg-4 col-md-4">
+    	<p><a href="{{store direct_url='men.html'}}"><img src="{{media url='wysiwyg/banner3.jpg'}}" alt="" /></a></p>
+    </div>
+</div>
+</div>

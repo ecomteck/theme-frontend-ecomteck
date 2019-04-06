@@ -1,0 +1,63 @@
+CMS Block Title: Block Footer
+CMS Block Identifier: block-footer
+Block Content:
+
+<div class="row">
+<div class="col-lg-3 col-md-3 col-sm-6">
+<div class="block block-links">
+<div class="block-title">
+<h3>OurStore.com</h3>
+</div>
+<div class="block-content">
+<ul>
+<li><a href="{{store url='about-us'}}">About Us</a></li>
+<li><a href="#">Delivery Information</a></li>
+<li><a href="{{store url='privacy-policy-cookie-restriction-mode'}}">Privacy Policy</a></li>
+<li><a href="{{store url='sales/guest/form'}}">Orders and Returns</a></li>
+<li><a href="{{store url='contact'}}">Contact us</a></li>
+<li><a href="{{store url='catalogsearch/advanced'}}">Advanced Search</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-lg-3 col-md-3 col-sm-6">
+<div class="block block-links">
+<div class="block-title">
+<h3>Customer Support</h3>
+</div>
+<div class="block-content">
+<ul>
+<li><a href="#">Help &amp; FAQs</a></li>
+<li><a href="#">Returns</a></li>
+<li><a href="#">Order History</a></li>
+<li><a href="#">Product Recalls</a></li>
+<li><a href="#">Partnerships</a></li>
+<li><a href="#">Affiliate Program</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-lg-3 col-md-3 col-sm-6">
+<div class="block block-links">
+<div class="block-title">
+<h3>Contact us</h3>
+</div>
+<div class="block-content">
+<p>Address: PO Box 16122 Collins Street West Victoria</p>
+<p>Phone: +777 2345 7885 / +777 8344 8733</p>
+<p>Email: contact@yourcompany.com</p>
+<ul class="social">
+<li><a title="Facebook" href="#"><em class="fa fa-facebook"><em class="d-none">Facebook</em></em></a></li>
+<li><a title="Twitter" href="#"><em class="fa fa-twitter"><em class="d-none">Twitter</em></em></a></li>
+<li><a title="Instagram" href="#"><em class="fa fa-instagram"><em class="d-none">Instagram</em></em></a></li>
+<li><a title="Google" href="#"><em class="fa fa-google-plus"><em class="d-none">Google</em></em></a></li>
+<li><a title="Youtube" href="#"><em class="fa fa-youtube-play"><em class="d-none">Youtube</em></em></a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-lg-3 col-md-3 col-sm-6">
+{{block class="Magento\Newsletter\Block\Subscribe" name="static.newsletter" template="Magento_Newsletter::subscribe.phtml"}}
+<p style="margin-top: 38px;"><img src="{{media url='wysiwyg/payment.png'}}" alt=""></p>
+</div>
+</div>

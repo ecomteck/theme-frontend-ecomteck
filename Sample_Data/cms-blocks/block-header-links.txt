@@ -1,0 +1,9 @@
+CMS Block Title: Header Links
+CMS Block Identifier: header-links
+Block Content:
+
+<ul class="header-links">
+<li><a href="#">Privacy Policy</a></li>
+<li><a href="#">Terms Of Use</a></li>
+<li><a href="#">Site Map</a></li>
+</ul>

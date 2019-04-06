@@ -1,0 +1,48 @@
+CMS Block Title: Slider Block
+CMS Block Identifier: slider
+Block Content:
+
+<div class="block-wrap">
+      <div class="block block-carousel">
+            <div class="block-content">
+                <div id="slider" class="owl-carousel owl-banner-carousel owl-bottom-narrow owl-bottom-absolute-narrow">
+                  <div class="item">
+                    <a href="#">
+                      <img src="{{media url="wysiwyg/slider1.jpg"}}" alt="" width="1920" height="678" />
+                    </a>
+                  </div>
+                  <div class="item">
+                    <a href="#">
+                        <img src="{{media url="wysiwyg/slider2.jpg"}}" alt="" width="1920" height="678" />
+                    </a>
+                  </div>
+                  <div class="item">
+                    <a href="#">
+                        <img src="{{media url="wysiwyg/slider3.jpg"}}" alt="" width="1920" height="678" />
+                    </a>
+                  </div>
+                </div>
+                <script type="text/javascript">
+                  require([
+                    'jquery',
+                    'Ves_All/lib/owl.carousel/owl.carousel.min'
+                    ], function ($) {
+                        var banner_owl = $("#slider");
+                        banner_owl.owlCarousel({
+                          items: 1,
+                          autoplay: true,
+                          autoplayTimeout: 5000,
+                          autoplayHoverPause: true,
+                          dots: false,
+                          nav: true,
+                          navRewind: true,
+                          animateIn: 'fadeIn',
+                          animateOut: 'fadeOut',
+                          loop: true,
+                          navText: ["<span class='fa fa-angle-left'>&nbsp;</span>","<span class='fa fa-angle-right'>&nbsp;</span>"]
+                      });
+                    });
+                </script>
+            </div>
+        </div>
+</div>

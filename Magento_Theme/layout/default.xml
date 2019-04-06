@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="header.panel">
+            <block class="Magento\Framework\View\Element\Html\Links" name="header.links">
+                <arguments>
+                    <argument name="css_class" xsi:type="string">header links</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logo_img_width" xsi:type="number">148</argument>
+                <argument name="logo_img_height" xsi:type="number">43</argument>
+            </arguments>
+        </referenceBlock>
+
+        <!-- Custom XML -->
+
+        <referenceContainer name="header.container">
+            <block class="Magento\Framework\View\Element\Template" name="ecom_header" template="Magento_Theme::html/ecom_header.phtml">
+
+                <block class="Magento\Framework\View\Element\Template" name="top.search" as="topSearch" template="Magento_Search::form.mini.phtml" />
+                <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
+                    <arguments>
+                        <argument name="target" xsi:type="string">contentarea</argument>
+                        <argument name="label" translate="true" xsi:type="string">Skip to Content</argument>
+                    </arguments>
+                </block>
+            </block>
+        </referenceContainer>
+        <move element="header.links" as="header_links" destination="ecom_header"/>
+        <move element="store_language" as="store_language" destination="ecom_header"/>
+        <move element="currency" as="currency" destination="ecom_header"/>
+        <move element="logo" as="logo" destination="ecom_header"/>
+        <move element="minicart" as="minicart" destination="ecom_header"/>
+        
+        <referenceBlock name="compare-link-wrapper"  remove="true"/>
+
+        <!-- End Custom XML -->
+
+        <referenceContainer name="footer">
+            <block class="Magento\Cms\Block\Block" name="block-footer">
+               <arguments>
+                    <argument name="block_id" xsi:type="string">block-footer</argument>
+               </arguments>
+            </block>
+            <block class="Magento\Store\Block\Switcher" name="store_switcher" as="store_switcher" after="footer_links" template="Magento_Store::switch/stores.phtml"/>
+            <referenceBlock name="form.subscribe" remove="true"/>
+            <referenceBlock name="footer_links" remove="true"/>
+        </referenceContainer>
+
+        <referenceBlock name="report.bugs" remove="true"/>
+        <move element="copyright" destination="before.body.end"/>
+    </body>
+</page>

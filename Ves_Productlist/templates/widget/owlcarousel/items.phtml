@@ -1,0 +1,350 @@
+<?php
+use Magento\Framework\App\Action\Action;
+$data = $this->helper('Ves\Productlist\Helper\Data');
+$_imgHelper = $this->helper('Ves\Productlist\Helper\Image');
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+$blockId = rand().time();
+$templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+$classes = '';
+
+// Item Settings
+$custom_item_height = '';
+$height_type = $this->getConfig('height_type');
+if($height_type == 'custom'){
+    $custom_item_height = (int)(str_replace("px","",$this->getConfig('custom_item_height', "")));
+}
+$show_image = $this->getConfig('show_image');
+$aspect_ratio = $this->getConfig('aspect_ratio');
+$image_width = $this->getConfig('image_width',300);
+$image_height = (int)$this->getConfig('image_height');
+$alt_image = $this->getConfig('alt_image');
+$alt_image_column = $this->getConfig('alt_image_column','position');
+$alt_image_column_value = $this->getConfig('alt_image_column_value',2);
+//If image width is not specified, use default values
+if ($image_width <= 0){
+    $image_width = 300;
+    $image_height = 300;
+}
+$catViewKeepFrame = TRUE;
+if($aspect_ratio){
+    $image_height = 0;
+    $catViewKeepFrame = FALSE;
+}
+if ($data->getCoreRegistry()->registry('catViewKeepFrame') === NULL){
+    $data->getCoreRegistry()->register('catViewKeepFrame', $catViewKeepFrame);
+}
+
+$show_name = $this->getConfig('show_name');
+$show_name_single_line = $this->getConfig('show_name_single_line');
+if($show_name_single_line){
+    $classes .= ' single-line-name';
+}
+$show_short_description = $this->getConfig('show_short_description');
+$short_max_char = (int)$this->getConfig('short_max_char',100);
+$show_learnmore = $this->getConfig('show_learnmore');
+$show_price = $this->getConfig('show_price');
+$show_review = $this->getConfig('show_review');
+$show_compare = $this->getConfig('show_compare');
+$compare_format = $this->getConfig('compare_format_type');
+$compare_text = $this->getConfig('compare_format_text');
+$compare_class = $this->getConfig('compare_format_class');
+$compareText = '<span>'.$compare_text.'</span>';
+$compareIcon = '<i class="'.$compare_class.'"></i>';
+$compareHtml = '';
+if((!$compare_format || $compare_format == 'text') && $compare_text){ // Only Text
+    $compareHtml = $compareText;
+}elseif($compare_format == 'icon'){ // Only Icon
+    $compareHtml = $compareIcon;
+}elseif($compare_format == 'icon-text'){ // Icon, Text
+    $compareHtml = $compareIcon.$compareText;
+}elseif($compare_format == 'text-icon'){ // Text, Icon
+    $compareHtml = $compareText.$compareIcon;
+}
+
+$show_wishlist = $this->getConfig('show_wishlist');
+$wishlist_format = $this->getConfig('wishlist_format_type');
+$wishlist_text = $this->getConfig('wishlist_format_text');
+$wishlist_class = $this->getConfig('wishlist_format_class');
+$wishlistText = '<span>'.$wishlist_text.'</span>';
+$wishlistIcon = '<i class="'.$wishlist_class.'"></i>';
+$wishlistHtml = '';
+if((!$wishlist_format || $wishlist_format == 'text') && $wishlist_text){ // Only Text
+    $wishlistHtml = $wishlistText;
+}elseif($wishlist_format == 'icon'){ // Only Icon
+    $wishlistHtml = $wishlistIcon;
+}elseif($wishlist_format == 'icon-text'){ // Icon, Text
+    $wishlistHtml = $wishlistIcon.$wishlistText;
+}elseif($wishlist_format == 'text-icon'){ // Text, Icon
+    $wishlistHtml = $wishlistText.$wishlistIcon;
+}
+
+$show_countdowntimer = $this->getConfig('show_countdowntimer');
+$show_new_label = $this->getConfig('show_new_label');
+$show_sale_label = $this->getConfig('show_sale_label');
+
+$show_addtocart = $this->getConfig('show_addtocart');
+$addtocart_popup_width = $this->getConfig('addtocart_popup_width');
+$addtocart_popup_height = $this->getConfig('addtocart_popup_height');
+$addtocart_format = $this->getConfig('addtocart_format_type');
+$addtocart_text = $this->getConfig('addtocart_format_text');
+$addtocart_class = $this->getConfig('addtocart_format_class');
+$addtocartText = '<span>'.$addtocart_text.'</span>';
+$addtocartIcon = '<i class="'.$addtocart_class.'"></i>';
+$addToCartHtml = '';
+if((!$addtocart_format || $addtocart_format == 'text') && $addtocart_text){ // Only Text
+    $addToCartHtml = $addtocartText;
+}elseif($addtocart_format == 'icon'){ // Only Icon
+    $addToCartHtml = $addtocartIcon;
+}elseif($addtocart_format == 'icon-text'){ // Icon, Text
+    $addToCartHtml = $addtocartIcon.$addtocartText;
+}elseif($addtocart_format == 'text-icon'){ // Text, Icon
+    $addToCartHtml = $addtocart_text.$addtocartIcon;
+}
+
+$addtocart_popup_width = $this->getConfig('addtocart_popup_width');
+$addtocart_popup_height = $this->getConfig('addtocart_popup_height');
+$show_quickview = $this->getConfig('show_quickview');
+$quickview_popup_width = $this->getConfig('quickview_popup_width',600);
+$quickview_popup_height = $this->getConfig('quickview_popup_height',600);
+$quickview_format = $this->getConfig('quickview_format_type');
+$quickview_text = $this->getConfig('quickview_format_text');
+$quickview_class = $this->getConfig('quickview_format_class');
+$quickviewText = '<span>'.$quickview_text.'</span>';
+$quickviewIcon = '<i class="'.$quickview_class.'"></i>';
+$quickviewtHtml = '';
+if((!$quickview_format || $quickview_format == 'text') && $quickview_text){ // Only Text
+    $quickviewtHtml = $quickviewText;
+}elseif($quickview_format == 'icon'){ // Only Icon
+    $quickviewtHtml = $quickviewIcon;
+}elseif($quickview_format == 'icon-text'){ // Icon, Text
+    $quickviewtHtml = $quickviewIcon.$quickviewText;
+}elseif($quickview_format == 'text-icon'){ // Text, Icon
+    $quickviewtHtml = $quickviewText.$quickviewIcon;
+}
+$collection = $this->getData('collection');
+
+$lazyload = $this->getConfig('lazyload');
+?>
+
+<?php // Product List ?>
+<?php foreach ($collection as $_columnCollection) { ?>
+<div class="product-block">
+    <?php foreach($_columnCollection as $_product){ ?>
+    <?php $productId = time().rand(); ?>
+    <div class="product-item-info" <?php if($custom_item_height){ ?>style="height:<?php echo $custom_item_height.'px' ?>"<?php } ?>>
+
+        <?php // Sale Icon, New Icon Block ?>
+        <?php if($show_new_label || $show_sale_label){ ?>
+        <div class="icon">
+            <?php
+            if($show_sale_label) {
+                $specialprice = $_product->getSpecialPrice();
+                $specialPriceFromDate = $_product->getSpecialFromDate();
+                $specialPriceToDate = $_product->getSpecialToDate();
+                $today =  time();
+                if ($specialprice) {
+                    if($today >= strtotime( $specialPriceFromDate) && $today <= strtotime($specialPriceToDate) || $today >= strtotime( $specialPriceFromDate) && is_null($specialPriceToDate)) {
+                        ?>
+                        <span class="onsale"><?php echo __("Sale");?></span>
+                        <?php
+                    }
+                }
+            }
+            if($show_new_label) {
+                $is_new = $data->checkProductIsNew( $_product );
+                if($is_new) { ?>
+                <span class="new-icon"><?php echo __("New");?></span>
+                <?php
+            }
+        }
+        ?>
+    </div>
+    <?php } ?>
+
+    <div class="product-image">
+        <?php // Product Image ?>
+        <?php if($show_image){ ?>
+        <?php
+        $_image = $_imgHelper->getImg($_product, $image_width, $image_height, 'category_page_grid');
+        ?>
+        <?php if($_image){ ?>
+        <?php $src = $_image->getUrl(); ?>
+        <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_image->getLabel() ?>" class="product-item-photo">
+            <img
+            <?php if ($lazyload) { ?>
+            class="owl-lazy" data-src="<?php echo $_image->getUrl(); ?>" alt="<?php echo $_image->getLabel() ?>"
+            src="#"
+            <?php } else { ?>
+            src="<?php echo $_image->getUrl(); ?>" alt="<?php echo $_image->getLabel() ?>"
+            <?php } ?>
+            width="<?php echo $image_width ?>" height="<?php echo $image_height ?>"/>
+        </a>
+        <?php } ?>
+        <?php if($alt_image){ ?>
+        <?php
+        $_altImg = $_imgHelper->getAltImgHtml($_product, $image_width, $image_height, 'category_page_grid', $alt_image_column, $alt_image_column_value);
+        ?>
+        <?php if($_altImg){ ?>
+        <?php $src = $_altImg->getUrl(); ?>
+        <a href="<?php echo $_product->getProductUrl() ?>" class="hover-image" title="<?php echo $_altImg->getLabel() ?>">
+            <img src="<?php echo $_altImg->getUrl(); ?>" alt="<?php echo $_altImg->getLabel() ?>" />
+        </a>
+        <?php } ?>
+        <?php } ?>
+        <?php } ?>
+
+        
+        <?php if($show_wishlist || $show_compare || $show_addtocart){ ?>
+        <div class="product-item-inner">
+        <div class="product-item-actions">
+            <?php // Add to cart button ?>
+            <?php if($show_addtocart){ ?>
+            <div class="actions-primary">
+                <?php if ($_product->isSaleable()): ?>
+                    <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
+                        <button class="action primary add-to-cart productlist-fancybox" type="button" title="<?php /* @escapeNotVerified */ echo __('Add to Cart') ?>" data-fancybox-href="<?php echo $data->getAddToCartUrl($_product) ?>" data-fancybox-type="iframe" data-fancybox-width="<?php echo $addtocart_popup_width ?>" data-fancybox-height="<?php echo $addtocart_popup_height ?>">
+                            <?php echo $addToCartHtml ?>
+                        </button>
+                    <?php else: ?>
+                        <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+                        <form data-role="productlist-tocart-form" action="<?php /* @escapeNotVerified */ echo $postParams['action']; ?>" method="post">
+                            <input type="hidden" name="ves" value="1">
+                            <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $postParams['data']['product']; ?>">
+                            <input type="hidden" name="<?php /* @escapeNotVerified */ echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php /* @escapeNotVerified */ echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
+                            <?php echo $block->getBlockHtml('formkey')?>
+                            <button type="submit"
+                            title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                            class="action add-to-cart primary">
+                            <?php echo $addToCartHtml ?>
+                        </button>
+                    </form>
+                <?php endif; ?>
+            <?php else: ?>
+                <?php if ($_product->getIsSalable()): ?>
+                    <div class="stock available"><span><?php /* @escapeNotVerified */ echo __('In stock') ?></span></div>
+                <?php else: ?>
+                    <div class="stock unavailable"><span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></div>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <?php } ?>
+
+        <?php // Wishlist && Compare links ?>
+        <?php if ($show_wishlist || $show_compare): ?>
+            <div class="actions-secondary" data-role="add-to-links">
+                <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow() && $show_wishlist): ?>
+                    <a href="#"
+                    data-post='<?php /* @escapeNotVerified */ echo $block->getAddToWishlistParams($_product); ?>'
+                    class="add-to-wishlist" data-action="add-to-wishlist"
+                    title="<?php /* @escapeNotVerified */ echo __('Add to Wish List') ?>">
+                    <?php echo $wishlistHtml ?>
+                </a>
+            <?php endif; ?>
+            <?php if ($block->getAddToCompareUrl() && $show_compare): ?>
+                <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
+                <a href="#" class="add-to-compare hidden-xs"
+                data-post='<?php /* @escapeNotVerified */ echo $compareHelper->getPostDataParams($_product);?>'
+                title="<?php /* @escapeNotVerified */ echo __('Add to Compare') ?>">
+                <?php echo $compareHtml ?>
+            </a>
+        <?php endif; ?>
+        <?php // Quickview ?>
+        <?php if($show_quickview){ ?>
+        <?php
+        $_image = $_imgHelper->getImg($_product, (int)$quickview_popup_width, (int)$quickview_popup_height, 'category_page_grid');
+        if($_image->getUrl()){
+            ?>
+            <a href="javascript:void(0)" id="productlist-fancybox-<?php echo $productId ?>" title="<?php echo $_product->getName(); ?>" data-fancybox-href="<?php echo $data->getAddToCartUrl($_product) ?>" data-fancybox-type="iframe" onclick="return false;" data-fancybox-height="<?php echo $quickview_popup_height ?>" data-fancybox-width="<?php echo $quickview_popup_width ?>" class="quick-view productlist-fancybox" >
+                <?php echo $quickviewtHtml; ?>
+            </a>
+            <?php } ?>
+            <?php } ?>
+        </div>
+    <?php endif; ?>
+</div>
+</div>
+<?php } ?>
+
+</div>
+
+
+<div class="product-item-details">
+    <?php // Name ?>
+    <?php $_productNameStripped = $block->stripTags($_product->getName(), null, true); ?>
+    <?php if($show_name){ ?>
+    <div class="product-item-name"> <a class="product-item-link" href="<?php echo $_product->getProductUrl() ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?></a></div>
+    <?php } ?>
+
+    <?php // Review ?>
+    <?php if($show_review){ ?>
+    <?php echo $block->getReviewsSummaryHtml($_product, $templateType, true); ?>
+    <?php } ?>
+
+    <?php // Countdown Timer Block ?>
+    <?php
+    $specialprice = $_product->getSpecialPrice();
+    $specialPriceFromDate = $_product->getSpecialFromDate();
+    $specialPriceToDate = $_product->getSpecialToDate();
+    $today =  time();
+    if ($specialprice && $specialPriceFromDate && $specialPriceToDate) {
+        if( $show_countdowntimer && ($today >= strtotime( $specialPriceFromDate) && $today <= strtotime($specialPriceToDate) || $today >= strtotime( $specialPriceFromDate) && is_null($specialPriceToDate))) {
+
+            $date1 = date('G:i:s', strtotime($_product->getSpecialToDate()));
+            if ($date1 == "0:00:00") {
+                $targetDate = date('m/d/Y \2\3\:\5\9\:\0\0', strtotime($_product->getSpecialToDate()));
+            }else{
+                $targetDate = date('m/d/Y G:i:s', strtotime($_product->getSpecialToDate()));
+            }
+            ?>
+            <div class="countdown-timmer">
+                <div class="item-detail">
+                    <div class="timer-explain">(<?php echo date('m/d/Y', strtotime($_product->getSpecialToDate())); ?>)</div>
+                </div>
+                <div id="item-countdown-<?php echo $productId ?>" class="item-countdown"></div>
+                <script type="text/javascript">
+                    require(['jquery'],function($){
+                        $(document).ready(function(){
+                            require(['jquery','Ves_Productlist/js/countdown'],function () {
+                                jQuery(document).ready(function(){
+                                    jQuery("#item-countdown-<?php echo $productId ?>").lofCountDown({
+                                        formatStyle:2,
+                                        TargetDate:"<?php echo $targetDate; ?>",
+                                        DisplayFormat:"<ul><li>%%D%% <div><?php echo __('Day');?></div></li><li> %%H%% <div><?php echo __('Hours');?></div></li><li> %%M%% <div><?php echo __('Mins');?></div></li><li> %%S%% <div><?php echo __('Secs');?></div></li></ul>",
+                                        FinishMessage:"<?php echo __('Expired');?>",
+                                    });
+                                });
+
+                            });
+                        });
+                    });
+                </script>
+            </div>
+            <?php } ?>
+            <?php } ?>
+            <?php // Price ?>
+            <?php if($show_price){ ?>
+            <?php echo $block->getVesProductPriceHtml($_product, 'ves-productlist-' . time().rand() ) ?>
+            <?php } ?>
+
+            <?php echo $block->getProductDetailsHtml($_product); ?>
+            <?php // Short Description ?>
+            <?php $shortDescription = $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description'); ?>
+            <?php if ($show_short_description && $shortDescription){ ?>
+            <div class="product-item-inner">
+                <div class="product-item-description">
+                    <?php $short_description = $data->subString($shortDescription, $short_max_char, '...'); ?>
+                    <?php echo $short_description; ?>
+                    <?php if($show_learnmore && $short_description!=''){ ?>
+                    <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped ?>" class="action more">
+                        <?php echo __('Learn More') ?>
+                    </a>
+                    <?php } ?>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+    <?php } ?>
+    <?php // End Product Information ?>
+</div>
+<?php } ?>
