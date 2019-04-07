@@ -30,12 +30,16 @@ PHP version 7.0.8 or greater
 Composer installation – http://devdocs.magento.com/guides/v2.0/install-gde/prereq/integrator_install_composer.html
 
 ## Demo
+
 Home page:
 .. image:: https://ecomteck.com/homepage-desktop.png
+
 Home page Mobile:
 .. image:: https://ecomteck.com/homepage-mobile.png
+
 Category Page:
 .. image:: https://ecomteck.com/category-page.png
+
 Product Page:
 .. image:: https://ecomteck.com/product-page.png
 
