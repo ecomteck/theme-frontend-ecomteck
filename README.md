@@ -2,7 +2,7 @@
 
 ## About and purpose
 
-Ecomteck Free Theme is a free and home-made Magento 2 theme, developed by Ecomteck. Its purpose is providing a starting point for the development of our own client projects. It's a solid base to extend the Magento 2 Blank theme with functionality & styling without breaking future upgrades. It is continuously being worked on, both refined and expanded. All added changes and new features are extends; we try to stay away from overrides until there is absolutely no other way possible.
+Ecomteck Free Theme is a free and home-made Magento 2 theme, developed by https://Ecomteck.com. Its purpose is providing a starting point for the development of our own client projects. It's a solid base to extend the Magento 2 Blank theme with functionality & styling without breaking future upgrades. It is continuously being worked on, both refined and expanded. All added changes and new features are extends; we try to stay away from overrides until there is absolutely no other way possible.
 
 Ecomteck Free Theme for magento 2 site is simple and clean theme which allow you build your store quickly and easily to custom layout and styles
 
@@ -30,6 +30,14 @@ PHP version 7.0.8 or greater
 Composer installation – http://devdocs.magento.com/guides/v2.0/install-gde/prereq/integrator_install_composer.html
 
 ## Demo
+Home page:
+.. image:: https://ecomteck.com/homepage-desktop.png
+Home page Mobile:
+.. image:: https://ecomteck.com/homepage-mobile.png
+Category Page:
+.. image:: https://ecomteck.com/category-page.png
+Product Page:
+.. image:: https://ecomteck.com/product-page.png
 
 ## Technicalities
 
