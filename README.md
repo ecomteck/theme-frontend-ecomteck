@@ -32,16 +32,16 @@ Composer installation – http://devdocs.magento.com/guides/v2.0/install-gde/pre
 ## Demo
 
 Home page:
-.. image:: https://ecomteck.com/homepage-desktop.png
+[![home page](https://ecomteck.com/homepage-desktop.png)](/uri)
 
 Home page Mobile:
-.. image:: https://ecomteck.com/homepage-mobile.png
+[![home mobile page](https://ecomteck.com/homepage-mobile.png)](/uri)
 
 Category Page:
-.. image:: https://ecomteck.com/category-page.png
+[![Category page](https://ecomteck.com/category-page.png)](/uri)
 
 Product Page:
-.. image:: https://ecomteck.com/product-page.png
+[![Product page](https://ecomteck.com/product-page.png)](/uri)
 
 ## Technicalities
 
